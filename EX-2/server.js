@@ -1,4 +1,3 @@
-// server.js
 const http = require('http');
 
 const server = http.createServer((req, res) => {
@@ -7,56 +6,38 @@ const server = http.createServer((req, res) => {
 
     console.log(`Received ${method} request for ${url}`);
 
-    let statusCode = 404;
-    let headers = { 'Content-Type': 'text/plain' };
-    let responseText = '404 Not Found';
-
-    switch (url) {
-        case '/':
-            if (method === 'GET') {
-                statusCode = 200;
-                headers = { 'Content-Type': 'text/html' };
-                responseText = `
-                    <html>
-                        <head><title>Home</title></head>
-                        <body>
-                            <h1>Welcome to the Home Page</h1>
-                            <p>This is a simple Node.js server.</p>
-                        </body>
-                    </html>
-                `;
-            }
-            break;
-        case '/about':
-            if (method === 'GET') {
-                statusCode = 200;
-                responseText = 'About us: at CADT, we love node.js!';
-            }
-            break;
-        case '/contact-us':
-            if (method === 'GET') {
-                statusCode = 200;
-                responseText = 'You can reach us via email...';
-            }
-            break;
-        case '/products':
-            if (method === 'GET') {
-                statusCode = 200;
-                responseText = 'Buy one get one...!';
-            }
-            break;
-        case '/projects':
-            if (method === 'GET') {
-                statusCode = 200;
-                responseText = 'Here are our awesome projects';
-            }
-            break;
-        default:
-            break;
+    if (url === '/' && method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'text/html' });
+        return res.end(`
+            <html>
+                <head><title>Home</title></head>
+                <body>
+                    <h1>Welcome to the Home Page</h1>
+                    <p>This is a simple Node.js server.</p>
+                </body>
+            </html>
+        `);
     }
-
-    res.writeHead(statusCode, headers);
-    res.end(responseText);
+    else if (url === '/about' && method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        return res.end('About us: at CADT, we love node.js!');
+    }
+    else if (url === '/contact-us' && method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        return res.end('You can reach us via email...');
+    }
+    else if (url === '/products' && method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        return res.end('Buy one get one...');
+    }
+    else if (url === '/projects' && method === 'GET') {
+        res.writeHead(200, { 'Content-Type': 'text/plain' });
+        return res.end('Here are our awesome projects');
+    }
+    else {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        return res.end('404 Not Found');
+    }
 });
 
 server.listen(3000, () => {
